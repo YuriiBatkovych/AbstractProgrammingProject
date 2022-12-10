@@ -1,9 +1,16 @@
-#include <boost/filesystem/operations.hpp>
 #include <iostream>
+#include "utils/ExpTree.h"
+using namespace std;
 
-int main(int argc, char *argv[]) {
-    std::cout << "The size of " << boost::filesystem::absolute(argv[0])
-              << " is " << boost::filesystem::file_size(argv[0]) << '\n';
+
+int main() {
+    string exp;
+    ExpressionTree<char> et;
+    cout<<"Enter expression in ONP form: ";
+    cin>>exp;
+    et.constructFromONP(exp);
+
+    cout<<"In-order Traversal of Expression Tree : ";
+    et.inOrder();
     return 0;
 }
-
