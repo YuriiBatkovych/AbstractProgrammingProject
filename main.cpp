@@ -5,12 +5,14 @@ using namespace std;
 
 int main() {
     string exp;
-    ExpressionTree<char> et;
-    cout<<"Enter expression in ONP form: ";
-    cin>>exp;
-    et.constructFromONP(exp);
-
-    cout<<"In-order Traversal of Expression Tree : ";
-    et.inOrder();
+    for(int i=0; i<10; i++){
+        ExpressionTree<char> et;
+        cout<<"Enter expression in Infix form: ";
+        cin>>exp;
+        et.constructFromInfix(exp);
+        cout<<"In-order Traversal of Expression Tree : ";
+        et.inOrder();
+        cout<<endl;
+    }
     return 0;
 }
