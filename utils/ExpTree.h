@@ -11,7 +11,7 @@ class TreeNode
 {
 public:
     Tensor val;
-    TreeNode<Tensor> *left, *right;
+    TreeNode *left, *right;
 
     TreeNode()
     {
@@ -20,18 +20,20 @@ public:
     }
 
 
-    TreeNode(char val)
+    TreeNode(Tensor val)
     {
         this->val = val;
         this->left = nullptr;
         this->right = nullptr;
     }
 
-    void set_left(TreeNode<Tensor>* left_node){
+    template<typename LeftType>
+    void set_left(TreeNode<LeftType>* left_node){
         this->left = left_node;
     }
 
-    void set_right(TreeNode<Tensor>* right_node){
+    template<typename RightType>
+    void set_right(TreeNode<RightType>* right_node){
         this->right = right_node;
     }
 
@@ -56,7 +58,7 @@ class ExpressionTree
 private:
     TreeNode<Tensor>* root;
 
-    void inOrderShow(TreeNode<char> *ptr)
+    void inOrderShow(TreeNode<Tensor> *ptr)
     {
         if (ptr != nullptr)
         {
@@ -66,14 +68,14 @@ private:
         }
     }
 
-    int priorytet(char x)  //funkcja wyznaczającza priorytet operatora
-    {   if(x=='=') return 0;
-        else if(x=='>'|| x=='<') return 1;
-        else if(x=='+'|| x=='-') return 2;
-        else if(x=='*'|| x=='/' || x=='%') return 3;
-        else if(x=='^') return 4;
-        else if(x=='~') return 5;
-        else if(isOperand(x)) return 6;
+    int priorytet(string x)  //funkcja wyznaczającza priorytet operatora
+    {   if(x=="=") return 0;
+        else if(x==">"|| x=="<") return 1;
+        else if(x=="+"|| x=="-") return 2;
+        else if(x=="*"|| x=="/" || x=="%") return 3;
+        else if(x=="^") return 4;
+        else if(x=="~") return 5;
+        else if(isOperand(x[0])) return 6;
         else return -2;
     }
 
@@ -86,13 +88,15 @@ public:
         stack<TreeNode<Tensor>*> tree_stack;
         if(ONP_correct(eqn)){
             for(int i=0; i<eqn.length(); i++){
-                if(isOperand(eqn[i])) {
-                    auto* ptr = new TreeNode<Tensor>(eqn[i]);
+                if(isONPOperand(eqn[i])) {
+                    string operand = getONPOperand(eqn, i);
+                    auto* ptr = new TreeNode<Tensor>(operand);
                     tree_stack.push(ptr);
                 }
                 else if(isOperator(eqn[i])){
                     if(isBiOperator(eqn[i])){
-                        auto* ptr = new TreeNode<Tensor>(eqn[i]);
+                        string tmp = string(1, eqn[i]);
+                        auto* ptr = new TreeNode<Tensor>(tmp);
                         ptr->set_right(tree_stack.top());
                         tree_stack.pop();
                         ptr->set_left(tree_stack.top());
@@ -100,7 +104,8 @@ public:
                         tree_stack.push(ptr);
                     }
                     else if(isMonoOperator(eqn[i])){
-                        auto* ptr = new TreeNode<Tensor>(eqn[i]);
+                        string tmp = string(1, eqn[i]);
+                        auto* ptr = new TreeNode<Tensor>(tmp);
                         ptr->set_right(tree_stack.top());
                         tree_stack.pop();
                         tree_stack.push(ptr);
@@ -114,7 +119,7 @@ public:
             }
             else cout<<"error"<<endl;
         }
-        else cout<<eqn<<"Onp eqn is not correct";
+        else cout<<eqn<<" Onp eqn is not correct"<<endl;
     }
 
     void constructFromInfix(string eqn){
@@ -122,37 +127,90 @@ public:
         constructFromONP(onp_form);
     }
 
+    string getVariableName(string eqn, int& i){
+        string variable;
+
+        while(isVariableNameChar(eqn[i])){
+            variable += eqn[i];
+            i++;
+        }
+        variable = '{' + variable + '}';
+        i--;
+        return variable;
+    }
+
+    string getNumber(string eqn, int& i){
+        string number;
+
+        while (isNumberChar(eqn[i])){
+            number += eqn[i];
+            i++;
+        }
+        number = '{' + number + '}';
+        i--;
+        return number;
+    }
+
+    string getVector(string eqn, int i){
+        string vector;
+
+        while(isVectorChar(eqn[i]) && eqn[i]!=']'){
+            vector+=eqn[i];
+            i++;
+        }
+
+        return vector+']';
+    }
+
     string constructONP(string eqn){
         string output;
 
         if(Infix_correct(eqn)) //jeżeli wyrażenie prawidłowe zaczynamy konwersję (Algorytm Dijkstra)
         {
-            stack<char> stos; //stos pomoczniczy
+            stack<string> stos; //stos pomoczniczy
             for(int i=0; i<eqn.length(); i++)
             {
-                if(isOperand(eqn[i]))
-                    output += eqn[i];
-                else if(eqn[i]=='(')
-                    stos.push(eqn[i]);
+                if(isOperand(eqn[i])) {
+                    if(isLetter(eqn[i])){
+                        string var_name = getVariableName(eqn, i);
+                        output += var_name;
+                    }
+                    else {
+                        string var_name = getNumber(eqn, i);
+                        output += var_name;
+                    }
+                }
+                else if(eqn[i]=='['){  //poczatek definicji vectora
+                    string vector = getVector(eqn, i);
+                    output += vector;
+                    i += vector.length()-1;
+                }
+                else if(eqn[i]=='(') {
+                    stos.push("(");
+                }
                 else if(isOperator(eqn[i]))
                 {
-                    while(!stos.empty() && priorytet(stos.top())>=priorytet(eqn[i])) {
+                    string tmp(1, eqn[i]);
+                    while(!stos.empty() && priorytet(stos.top())>=priorytet(tmp)) {
                         output += stos.top();
                         stos.pop();
                     }
-                    stos.push(eqn[i]);
+                    string s(1, eqn[i]);
+                    stos.push(s);
                 }
                 else if(eqn[i]=='~'|| eqn[i]=='^' || eqn[i]=='=')
                 {
-                    while(!stos.empty() && priorytet(stos.top())>priorytet(eqn[i])) {
+                    string tmp(1, eqn[i]);
+                    while(!stos.empty() && priorytet(stos.top())>priorytet(tmp)) {
                         output += stos.top();
                         stos.pop();
                     }
-                    stos.push(eqn[i]);
+                    string s(1, eqn[i]);
+                    stos.push(s);
                 }
                 else if(eqn[i]==')')
                 {
-                    while(stos.top()!='(') {
+                    while(stos.top() != "(") {
                         output += stos.top();
                         stos.pop();
                     }

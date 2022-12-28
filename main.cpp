@@ -6,7 +6,7 @@ using namespace std;
 int main() {
     string exp;
     for(int i=0; i<10; i++){
-        ExpressionTree<char> et;
+        ExpressionTree<string> et;
         cout<<"Enter expression in Infix form: ";
         cin>>exp;
         et.constructFromInfix(exp);
