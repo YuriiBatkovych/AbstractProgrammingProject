@@ -8,4 +8,4 @@ set(Boost_LIBRARY_DIR D:/Boost/boost_1_78_0/boost_1_78_0/)
 find_package(Boost COMPONENTS REQUIRED)
 include_directories(${Boost_INCLUDE_DIR})
 
-add_executable(project main.cpp utils/ExpTree.h)
+add_executable(project main.cpp utils/ExpTree.h utils/Dual.h)

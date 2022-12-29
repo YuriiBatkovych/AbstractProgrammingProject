@@ -1,18 +1,17 @@
 #include <iostream>
 #include "utils/ExpTree.h"
+#include "utils/Dual.h"
 using namespace std;
 
 
 int main() {
-    string exp;
-    for(int i=0; i<10; i++){
-        ExpressionTree<string> et;
-        cout<<"Enter expression in Infix form: ";
-        cin>>exp;
-        et.constructFromInfix(exp);
-        cout<<"In-order Traversal of Expression Tree : ";
-        et.inOrder();
-        cout<<endl;
-    }
+
+    Dual x(5);
+    Dual y(6);
+
+    Dual f = pow(x, 2)*y;
+
+    cout<<f.getDerivative()<<" "<<f.getValue()<<endl;
+
     return 0;
 }
