@@ -6,10 +6,11 @@
 
 using namespace std;
 
+template<typename Numeric>
 class Dual {
 private:
-    double val;
-    double der;
+    Numeric val;
+    Numeric der;
 
 public:
     Dual(){
@@ -17,128 +18,164 @@ public:
         this->der = 0;
     };
 
-    explicit Dual(double val):val(val), der(0){};
+    explicit Dual(Numeric val):val(val), der(0){};
 
-    Dual(double val, double der):val(val), der(der){};
+    Dual(Numeric val, Numeric der):val(val), der(der){};
 
-    void setValue(double value){
+    void setValue(Numeric value){
         this->val = value;
     };
 
-    void setDerivative(double derivative){
+    void setDerivative(Numeric derivative){
         this->der = derivative;
     };
 
-    [[nodiscard]] double getValue() const{
+    [[nodiscard]] Numeric getValue() const{
         return val;
     };
 
-    [[nodiscard]] double getDerivative() const{
+    [[nodiscard]] Numeric getDerivative() const{
         return der;
     };
 
     // operators
-    friend Dual operator+(const Dual& u, const Dual& v);
-    friend Dual operator-(const Dual& u, const Dual& v);
-    friend Dual operator*(const Dual& u, const Dual& v);
-    friend Dual operator/(const Dual& u, const Dual& v);
+    template<typename NumericLeft, typename NumericRight>
+    friend Dual<NumericLeft> operator+(const Dual<NumericLeft>& u, const Dual<NumericRight>& v);
 
-    Dual operator+=(const Dual& u){
+    template<typename NumericLeft, typename NumericRight>
+    friend Dual<NumericLeft> operator-(const Dual<NumericLeft>& u, const Dual<NumericRight>& v);
+
+    template<typename NumericLeft, typename NumericRight>
+    friend Dual<NumericLeft> operator*(const Dual<NumericLeft>& u, const Dual<NumericRight>& v);
+
+    template<typename NumericLeft, typename NumericRight>
+    friend Dual<NumericLeft> operator/(const Dual<NumericLeft>& u, const Dual<NumericRight>& v);
+
+    template<typename NumericRight>
+    Dual<Numeric> operator+=(const Dual<NumericRight>& u){
         *this = *this+u;
         return *this;
     };
 
-    Dual operator-=(const Dual& u){
+    template<typename NumericRight>
+    Dual<Numeric> operator-=(const Dual<NumericRight>& u){
         *this = *this-u;
         return *this;
     };
 
-    Dual operator*=(const Dual& u){
+    template<typename NumericRight>
+    Dual<Numeric> operator*=(const Dual<NumericRight>& u){
         *this = *this*u;
         return *this;
     };
 
-    Dual operator/=(const Dual& u){
+    template<typename NumericRight>
+    Dual<Numeric> operator/=(const Dual<NumericRight>& u){
         *this = *this/u;
         return *this;
     };
 
-    friend std::ostream& operator<<(std::ostream& os, const Dual& a);
+    template<typename NumericType>
+    friend std::ostream& operator<<(std::ostream& os, const Dual<NumericType>& a);
 
     // maths
-    friend Dual sin(Dual d);
-    friend Dual cos(Dual d);
-    friend Dual exp(Dual d);
-    friend Dual log(Dual d);
-    friend Dual abs(Dual d);
-    friend Dual pow(Dual d, double p);
+    template<typename NumericType>
+    friend Dual<NumericType> sin(Dual<NumericType> d);
+
+    template<typename NumericType>
+    friend Dual<NumericType> cos(Dual<NumericType> d);
+
+    template<typename NumericType>
+    friend Dual<NumericType> exp(Dual<NumericType> d);
+
+    template<typename NumericType>
+    friend Dual<NumericType> log(Dual<NumericType> d);
+
+    template<typename NumericType>
+    friend Dual<NumericType> abs(Dual<NumericType> d);
+
+    template<typename NumericType>
+    friend Dual<NumericType> pow(Dual<NumericType> d, double p);
 };
 
-
-Dual operator+(const Dual& u, const Dual& v){
+template<typename NumericLeft, typename NumericRight>
+Dual<NumericLeft> operator+(const Dual<NumericLeft>& u, const Dual<NumericRight>& v){
     return {u.val+v.val, u.der+v.der};
 }
 
-Dual operator-(const Dual& u, const Dual& v){
+template<typename NumericLeft, typename NumericRight>
+Dual<NumericLeft> operator-(const Dual<NumericLeft>& u, const Dual<NumericRight>& v){
     return {u.val-v.val, u.der-v.der};
 }
 
-Dual operator*(const Dual& u, const Dual& v){
+template<typename NumericLeft, typename NumericRight>
+Dual<NumericLeft> operator*(const Dual<NumericLeft>& u, const Dual<NumericRight>& v){
     return {u.val*v.val, u.der*v.val+u.val*v.der};
 }
 
-Dual operator/(const Dual& u, const Dual& v){
+template<typename NumericLeft, typename NumericRight>
+Dual<NumericLeft> operator/(const Dual<NumericLeft>& u, const Dual<NumericRight>& v){
     return {u.val/v.val, (u.der*v.val-u.val*v.der)/(v.val*v.val)};
 }
 
-std::ostream& operator<<(std::ostream& os, const Dual& a){
+template<typename Numeric>
+std::ostream& operator<<(std::ostream& os, const Dual<Numeric>& a){
     os << a.val;
     return os;
 }
 
-
-Dual operator+(const double value, const Dual& v){
-    Dual d(value);
+template<typename NumericLeft, typename NumericRight>
+Dual<NumericLeft> operator+(const NumericLeft value, const Dual<NumericRight>& v){
+    Dual<NumericLeft> d(value);
     return d+v;
 }
 
-Dual operator-(const double value, const Dual& v){
-    Dual d(value);
+template<typename NumericLeft, typename NumericRight>
+Dual<NumericLeft> operator-(const NumericLeft value, const Dual<NumericRight>& v){
+    Dual<NumericLeft> d(value);
     return d-v;
 }
 
-Dual operator*(const double value, const Dual& v){
-    Dual d(value);
+template<typename NumericLeft, typename NumericRight>
+Dual<NumericLeft> operator*(const NumericLeft value, const Dual<NumericRight>& v){
+    Dual<NumericLeft> d(value);
     return d*v;
 }
 
-Dual operator/(const double value, const Dual& v){
-    Dual d(value);
+template<typename NumericLeft, typename NumericRight>
+Dual<NumericLeft> operator/(const NumericLeft value, const Dual<NumericRight>& v){
+    Dual<NumericLeft> d(value);
     return d/v;
 }
 
-Dual sin(Dual d){
+template<typename Numeric>
+Dual<Numeric> sin(Dual<Numeric> d){
     return {::sin(d.val), d.der*::cos(d.val)};
 }
 
-Dual cos(Dual d){
+template<typename Numeric>
+Dual<Numeric> cos(Dual<Numeric> d){
     return {::cos(d.val), -d.der*::sin(d.val)};
 }
 
-Dual exp(Dual d){
+template<typename Numeric>
+Dual<Numeric> exp(Dual<Numeric> d){
     return {::exp(d.val), d.der*::exp(d.val)};
 }
 
-Dual log(Dual d){
+template<typename Numeric>
+Dual<Numeric> log(Dual<Numeric> d){
     return {::log(d.val), d.der/d.val};
 }
 
-Dual abs(Dual d){
+template<typename Numeric>
+Dual<Numeric> abs(Dual<Numeric> d){
     int sign = d.val==0 ? 0 : d.val/::abs(d.val);
     return {static_cast<double>(::abs(d.val)), d.der*sign};
 }
 
-Dual pow(Dual d, double p){
+template<typename Numeric>
+Dual<Numeric> pow(Dual<Numeric> d, double p){
     return {::pow(d.val, p), p*d.der*::pow(d.val, p-1)};
 }
 

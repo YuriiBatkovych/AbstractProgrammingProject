@@ -3,6 +3,9 @@
 
 #include <iostream>
 #include <stack>
+#include <vector>
+#include <bits/stdc++.h>
+
 using namespace std;
 
 bool isOperand(char ch){
@@ -21,8 +24,16 @@ bool isVariableNameChar(char ch){
     return ch >= '0' && ch <= '9' || ch>='A' && ch<='Z' || ch>='a' && ch<='z' || ch=='_';
 }
 
+bool  isNumber(char ch){
+    return ch >= '0' && ch <= '9';
+}
+
 bool  isNumberChar(char ch){
     return ch >= '0' && ch <= '9' || ch == '.';
+}
+
+bool isDoubleNumber(const string& s){
+    return s.find('.') != std::string::npos;
 }
 
 bool isVectorChar(char ch){
@@ -40,6 +51,28 @@ bool isMonoOperator(char ch){
 
 bool isBiOperator(char ch){
     return isOperator(ch) && !isMonoOperator(ch);
+}
+
+bool isVector(string value){
+    return value[0] == '[' && value[value.length()-1] == ']';
+}
+
+string getVectorWithoutBrackets(string vec){
+    return vec.substr(1, vec.length()-2);
+}
+
+vector<string> parseCommaSeparated(const string& str){
+    vector<string> v;
+
+    stringstream ss(str);
+
+    while (ss.good()) {
+        string substr;
+        getline(ss, substr, ',');
+        v.push_back(substr);
+    }
+
+    return v;
 }
 
 string getONPOperand(string eqn, int& i){

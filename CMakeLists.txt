@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.15)
 project(AbstractProgrammingProject)
 
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 20)
 
 set(Boost_INCLUDE_DIR D:/Boost/boost_1_78_0/boost_1_78_0/)
 set(Boost_LIBRARY_DIR D:/Boost/boost_1_78_0/boost_1_78_0/)
