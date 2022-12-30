@@ -2,7 +2,7 @@
 #define ABSTRACTPROGRAMMINGPROJECT_CONVERTERS
 
 #include "expression_checkers.cpp"
-
+#include "ExpressionVector.h"
 template<typename InputType, typename OutputType>
 OutputType convert(InputType input){}
 
@@ -15,9 +15,9 @@ NumericType convert(string value){
 }
 
 template<typename NumericType>
-vector<NumericType> convertVector(string value){
+ExpressionVector<NumericType> convertVector(string value){
     vector<string> vecOfNums = parseCommaSeparated(getVectorWithoutBrackets(value));
-    vector<double> nums;
+    ExpressionVector<NumericType> nums;
     nums.reserve(vecOfNums.size());
     for (auto & vecOfNum : vecOfNums)
         nums.push_back(static_cast<NumericType>(strtod(vecOfNum.c_str(), nullptr)));

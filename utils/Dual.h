@@ -75,6 +75,12 @@ public:
         return *this;
     };
 
+    Dual<Numeric> operator-(){
+        this->val = -val;
+        this->der = -der;
+        return *this;
+    };
+
     template<typename NumericType>
     friend std::ostream& operator<<(std::ostream& os, const Dual<NumericType>& a);
 
@@ -96,6 +102,9 @@ public:
 
     template<typename NumericType>
     friend Dual<NumericType> pow(Dual<NumericType> d, double p);
+
+    template<typename NumericType>
+    friend Dual<NumericType> pow(Dual<NumericType> left, Dual<NumericType> right);
 };
 
 template<typename NumericLeft, typename NumericRight>
@@ -177,6 +186,11 @@ Dual<Numeric> abs(Dual<Numeric> d){
 template<typename Numeric>
 Dual<Numeric> pow(Dual<Numeric> d, double p){
     return {::pow(d.val, p), p*d.der*::pow(d.val, p-1)};
+}
+
+template<typename Numeric>
+Dual<Numeric> pow(Dual<Numeric> left, Dual<Numeric> right){
+    return {::pow(left.val, right.val), right.val*left.der*::pow(left.val, right.val-1)};
 }
 
 #endif //ABSTRACTPROGRAMMINGPROJECT_DUAL_H

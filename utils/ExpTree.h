@@ -6,14 +6,35 @@
 #include <utility>
 #include "expression_checkers.cpp"
 #include "converters.cpp"
+#include "Dual.h"
 
 using namespace std;
 
 template<typename Tensor>
 class TreeNode
 {
+private:
+    template<typename ResultType>
+    ResultType recursiveCompute(){
+        if(isBiOperator(val[0])){
+            ResultType left_arg = left->compute<ResultType>();
+            ResultType right_arg = right->compute<ResultType>();
+            return calculate<ResultType>(left_arg, right_arg);
+        }
+        else if(isMonoOperator(val[0])){
+            if(left != nullptr){
+                return calculate<ResultType>(left->compute<ResultType>());
+            }
+            else if(right != nullptr){
+                return calculate<ResultType>(right->compute<ResultType>());
+            }
+            else cout<<"ERROR"<<endl;
+        }
+    }
+
 protected:
     Tensor val;
+    bool derivative = false;
     TreeNode *ancestor;
     TreeNode *left, *right;
 public:
@@ -31,6 +52,18 @@ public:
         this->ancestor = nullptr;
     }
 
+    TreeNode(const TreeNode& other){
+        this->val = other.val;
+
+        if(other.left!=nullptr) this->left = new TreeNode<Tensor>(*other.left);
+        else this->left = nullptr;
+
+        if(other.right!=nullptr) this->right = new TreeNode<Tensor>(*other.right);
+        else this->right = nullptr;
+
+        this->ancestor = nullptr;
+    }
+
     template<typename LeftType>
     void set_left(TreeNode<LeftType>* left_node){
         this->left = left_node;
@@ -44,6 +77,12 @@ public:
     template<typename AncestorType>
     void set_ancestor(TreeNode<AncestorType>* ancestor_node){
         this->ancestor = ancestor_node;
+    }
+
+    void set_derivative(string var){
+        this->derivative = (val==var);
+        if(left!= nullptr) left->set_derivative(var);
+        if(right!= nullptr) right->set_derivative(var);
     }
 
     auto get_left(){ return left; }
@@ -81,6 +120,8 @@ public:
                 return left_arg/right_arg;
             case '^':
                 return pow(left_arg, right_arg);
+            default:
+                return left_arg;
         }
     }
 
@@ -89,7 +130,15 @@ public:
         switch (val[0]) {
             case '~':
                 return -arg;
+            default:
+                return arg;
         }
+    }
+
+    void replace(string value, string replace_value){
+        if(val==value) val = replace_value;
+        if(left!= nullptr) left->replace(value, replace_value);
+        if(right!= nullptr) right->replace(value, replace_value);
     }
 
     template<typename ResultType>
@@ -98,17 +147,51 @@ public:
             return convert<ResultType>(val);
         }
         else{
+            return recursiveCompute<ResultType>();
+        }
+    }
+
+    template<typename ResultType>
+    ExpressionVector<ResultType> computeVector(){
+        if(this->is_leaf()){
+            return convertVector<ResultType>(val);
+        }
+        else{
             if(isBiOperator(val[0])){
-                ResultType left_arg = left->compute<ResultType>();
-                ResultType right_arg = right->compute<ResultType>();
-                return calculate<ResultType>(left_arg, right_arg);
+                ExpressionVector<ResultType> left_arg = left->computeVector<ResultType>();
+                ExpressionVector<ResultType> right_arg = right->computeVector<ResultType>();
+                return calculate<ExpressionVector<ResultType>>(left_arg, right_arg);
             }
             else if(isMonoOperator(val[0])){
                 if(left != nullptr){
-                    return calculate<ResultType>(left->compute<ResultType>());
+                    return calculate<ExpressionVector<ResultType>>(left->computeVector<ResultType>());
                 }
                 else if(right != nullptr){
-                    return calculate<ResultType>(right->compute<ResultType>());
+                    return calculate<ExpressionVector<ResultType>>(right->computeVector<ResultType>());
+                }
+                else cout<<"ERROR"<<endl;
+            }
+        }
+    }
+
+    template<typename ResultType>
+    Dual<ResultType> computeFunctional(){
+        if(this->is_leaf()){
+            if(derivative) return Dual(convert<ResultType>(val), 1);
+            return Dual(convert<ResultType>(val));
+        }
+        else{
+            if(isBiOperator(val[0])){
+                Dual<ResultType> left_arg = left->template computeFunctional<ResultType>();
+                Dual<ResultType> right_arg = right->template computeFunctional<ResultType>();
+                return calculate<Dual<ResultType>>(left_arg, right_arg);
+            }
+            else if(isMonoOperator(val[0])){
+                if(left != nullptr){
+                    return calculate<Dual<ResultType>>(left->template computeFunctional<ResultType>());
+                }
+                else if(right != nullptr){
+                    return calculate<Dual<ResultType>>(right->template computeFunctional<ResultType>());
                 }
                 else cout<<"ERROR"<<endl;
             }
@@ -122,8 +205,7 @@ class ExpressionTree
 protected:
     TreeNode<string>* root;
 
-    void inOrderShow(TreeNode<Tensor> *ptr)
-    {
+    void inOrderShow(TreeNode<string> *ptr){
         if (ptr != nullptr)
         {
             inOrderShow(ptr->get_left());
@@ -132,8 +214,7 @@ protected:
         }
     }
 
-    void preOrderShow(TreeNode<Tensor> *ptr)
-    {
+    void preOrderShow(TreeNode<string> *ptr){
         if (ptr != nullptr)
         {
             cout<<ptr->get_value();
@@ -142,8 +223,7 @@ protected:
         }
     }
 
-    void postOrderShow(TreeNode<Tensor> *ptr)
-    {
+    void postOrderShow(TreeNode<string> *ptr){
         if (ptr != nullptr)
         {
             postOrderShow(ptr->get_left());
@@ -314,7 +394,7 @@ public:
         constructFromONP(onp_form);
     }
 
-    Tensor compute(){
+    virtual Tensor compute(){
         if(root == nullptr)
             return 0;
         return root->compute<Tensor>();
