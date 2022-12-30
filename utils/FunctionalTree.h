@@ -6,19 +6,21 @@
 #include <list>
 #include <algorithm>
 #include <cstdarg>
+#include <utility>
 #include "Dual.h"
+#include "NodeCreators.h"
 
 template<typename Tensor, int N_arguments>
-class FunctionalTree : public ExpressionTree<Tensor>{
+class FunctionalTree : public ExpressionTree<Tensor, FunctionalNodeCreator>{
 private:
     list<string> argument_names;
 
-    bool variable_exist(string variable){
+    bool variable_exist(const string& variable){
         return std::find(argument_names.begin(), argument_names.end(), variable) != argument_names.end();
     }
 
 protected:
-    string getVariableName(string eqn, int& i){
+    string getVariableName(const string& eqn, int& i){
         string variable;
 
         while(isVariableNameChar(eqn[i])){
@@ -38,7 +40,7 @@ protected:
         return variable;
     }
 
-    string getNumber(string eqn, int& i){
+    string getNumber(const string& eqn, int& i){
         string number;
 
         while (isNumberChar(eqn[i])){
@@ -59,8 +61,8 @@ public:
         va_list args;
         va_start(args, arg);
 
-        auto* copyRoot = new TreeNode<string>(*(this->root));
-        copyRoot->set_derivative(derivative_variable);
+        auto* copyRoot = new FunctionalNode<string>(*(this->root));
+        copyRoot->set_derivative(std::move(derivative_variable));
 
         for(string& var : argument_names){
             copyRoot->replace(var, std::to_string(arg));

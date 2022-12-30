@@ -2,21 +2,14 @@
 #define ABSTRACTPROGRAMMINGPROJECT_EXPVECTORTREE_H
 
 #include <iostream>
-#include "ExpTree.h"
+#include "ComputableTree.h"
+#include "NodeCreators.h"
 
 template<typename Tensor>
-class ExpVectorTree : public ExpressionTree<Tensor>{
-
+class VectorTree : public ComputableTree<Tensor, VectorNodeCreator>{
 protected:
-
-    string getVariableName(string eqn, int& i){
-        cout<<"ERRROR"<<endl;
-        return "";
-    }
-
     string getNumber(string eqn, int& i) {
         string number;
-
         while (isNumberChar(eqn[i])) {
             number += eqn[i];
             i++;
@@ -25,13 +18,11 @@ protected:
         i--;
         return number;
     }
-
 public:
-
     ExpressionVector<Tensor> computeVector(){
         if(this->root == nullptr)
             return ExpressionVector<Tensor>();
-        return this->root->template computeVector<Tensor>();
+        return ((VectorNode<string>*)(this->root))->template computeVector<Tensor>();
     }
 };
 
