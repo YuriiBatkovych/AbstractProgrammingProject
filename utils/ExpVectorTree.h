@@ -25,7 +25,7 @@ protected:
 public:
 
     VectorTree(): ExpressionTree<Tensor, VectorNodeCreator>(){}
-    VectorTree(const ExpressionTree<Tensor, VectorNodeCreator>& expTree):
+    [[maybe_unused]] VectorTree(const ExpressionTree<Tensor, VectorNodeCreator>& expTree):
             ExpressionTree<Tensor, VectorNodeCreator>(expTree){};
 
     ExpressionVector<Tensor> compute(){

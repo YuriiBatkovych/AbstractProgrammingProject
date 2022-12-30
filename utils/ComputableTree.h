@@ -23,7 +23,7 @@ protected:
 public:
 
     ComputableTree(): ExpressionTree<Tensor, NodeCreator>(){}
-    ComputableTree(const ExpressionTree<Tensor, NodeCreator>& expTree):
+    [[maybe_unused]] ComputableTree(const ExpressionTree<Tensor, NodeCreator>& expTree):
                     ExpressionTree<Tensor, NodeCreator>(expTree){};
 
     virtual Tensor compute(){
