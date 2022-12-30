@@ -144,12 +144,10 @@ ExpressionVector<Numeric> pow(ExpressionVector<Numeric> d, double p){
 template<typename Numeric>
 ExpressionVector<Numeric> pow(ExpressionVector<Numeric> left, ExpressionVector<Numeric> right){
     ExpressionVector<Numeric> result;
-    cout<<"In pow expvector"<<endl;
     if(left.size() == right.size()){
         for(size_t i=0; i<left.size(); i++)
             result.push_back(::pow(left[i], right[i]));
     }
-
     return result;
 }
 

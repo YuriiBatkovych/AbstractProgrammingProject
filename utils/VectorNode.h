@@ -30,7 +30,7 @@ public:
                 else if(this->right != nullptr){
                     return calculate<ExpressionVector<ResultType>>(((VectorNode<Tensor>*)(this->right))->template computeVector<ResultType>());
                 }
-                else cout<<"ERROR"<<endl;
+                else throw TooFewArgumentsException();
             }
         }
     }

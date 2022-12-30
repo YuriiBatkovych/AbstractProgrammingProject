@@ -3,6 +3,7 @@
 
 #include "TreeNode.h"
 #include "ComputeNode.h"
+#include "../exceptions/ArgumentsException.h"
 
 template<typename Tensor>
 class ComputeNode : public TreeNode<Tensor>{
@@ -21,9 +22,10 @@ private:
             else if(this->right != nullptr){
                 return calculate<ResultType>(((ComputeNode<Tensor>*)(this->right))->template compute<ResultType>());
             }
-            else cout<<"ERROR"<<endl;
+            else throw TooFewArgumentsException();
         }
     }
+
 public:
 
     ComputeNode(): TreeNode<Tensor>(){}

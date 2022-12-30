@@ -31,7 +31,7 @@ protected:
         if(!variable_exist(variable)){
             argument_names.push_back(variable);
             if(argument_names.size()>N_arguments)
-                cout<<"Error"<<endl;
+                throw TooMuchArgumentsException();
         }
 
         variable = '{' + variable + '}';
@@ -54,7 +54,7 @@ protected:
 
 public:
 
-    Dual<Tensor> computeFunctional(string derivative_variable, Tensor arg, ...){
+    Dual<Tensor> compute(string derivative_variable, Tensor arg, ...){
         if(this->root == nullptr)
             return Dual<Tensor>();
 

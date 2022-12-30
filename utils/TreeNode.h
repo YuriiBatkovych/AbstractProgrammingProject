@@ -4,7 +4,7 @@
 #include <iostream>
 #include "Dual.h"
 #include "ExpressionVector.h"
-
+#include "../exceptions/OperatorException.h"
 template<typename Tensor>
 class TreeNode
 {
@@ -90,7 +90,7 @@ public:
             case '^':
                 return pow(left_arg, right_arg);
             default:
-                return left_arg;
+                throw OperatorException();
         }
     }
 
@@ -100,7 +100,7 @@ public:
             case '~':
                 return -arg;
             default:
-                return arg;
+                throw OperatorException();
         }
     }
 

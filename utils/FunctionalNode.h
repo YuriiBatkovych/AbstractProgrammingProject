@@ -38,7 +38,7 @@ public:
                 else if(this->right != nullptr){
                     return calculate<Dual<ResultType>>(((FunctionalNode<Tensor>*)(this->right))->template computeFunctional<ResultType>());
                 }
-                else cout<<"ERROR"<<endl;
+                else throw TooFewArgumentsException();
             }
         }
     }

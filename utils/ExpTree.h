@@ -9,7 +9,7 @@
 #include "Dual.h"
 #include "TreeNode.h"
 #include "NodeCreators.h"
-
+#include "../exceptions/CorectionExceptions.h"
 using namespace std;
 
 template<typename Tensor,
@@ -82,7 +82,7 @@ protected:
         return number;
     }
 
-    string getVector(const string& eqn, int i){
+    virtual string getVector(const string& eqn, int i){
         string vector;
 
         while(isVectorChar(eqn[i]) && eqn[i]!=']'){
@@ -154,7 +154,7 @@ protected:
                     stos.pop();
                 }
         }
-        else cout<<"Infix eqn is not correct"<<endl;
+        else throw InfixExpressionException();
         return output;
     }
 
@@ -194,9 +194,9 @@ protected:
                 root = tree_stack.top();
                 tree_stack.pop();
             }
-            else cout<<"error"<<endl;
+            else throw ONPExpressionException();
         }
-        else cout<<eqn<<" Onp eqn is not correct"<<endl;
+        else throw ONPExpressionException();
     }
 
 public:

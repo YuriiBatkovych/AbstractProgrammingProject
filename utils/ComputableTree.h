@@ -5,6 +5,7 @@
 #include "ExpTree.h"
 #include "NodeCreators.h"
 #include "ComputeNode.h"
+#include "../exceptions/NotAllowedExceptions.h"
 
 template<typename Tensor,
          template<typename> class NodeCreator = ComputeNodeCreator
@@ -13,11 +14,13 @@ class ComputableTree : public ExpressionTree<Tensor, NodeCreator>{
 
 protected:
     string getVariableName(const string& eqn, int& i){
-        cout<<"ERRROR"<<endl;
-        return "";
+        throw VariablesNotAllowedException();
+    }
+
+    virtual string getVector(const string& eqn, int i){
+        throw VectorsNotAllowedException();
     }
 public:
-
     virtual Tensor compute(){
         if(this->root == nullptr)
             return Tensor();

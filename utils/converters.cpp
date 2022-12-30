@@ -3,6 +3,8 @@
 
 #include "expression_checkers.cpp"
 #include "ExpressionVector.h"
+#include "../exceptions/NumericConvertionException.h"
+
 template<typename InputType, typename OutputType>
 OutputType convert(InputType input){}
 
@@ -11,7 +13,7 @@ NumericType convert(string value){
     if(!value.empty() && isNumber(value[0])) {
         return static_cast<NumericType>(atof(value.c_str()));
     }
-    else cout<<"ERROR"<<endl;   ////TO DO
+    else throw NumericConvertionException();   ////TO DO
 }
 
 template<typename NumericType>

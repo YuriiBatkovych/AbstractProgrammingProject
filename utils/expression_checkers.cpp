@@ -92,7 +92,7 @@ string getONPOperand(string eqn, int& i){
 
 bool ONP_correct(string eqn){
     stack<string> stos;
-    for(int i=0; i<eqn.length(); i++)//sprawdzamy poprawnosc "probujac obliczyc to wyrazenie"
+    for(int i=0; i<eqn.length(); i++)
     {
         if(isONPOperand(eqn[i])){
             string operand = getONPOperand(eqn, i);
@@ -120,7 +120,7 @@ bool Infix_correct(string eqn){
     int state = 0;
     int number_open_brackets=0;
 
-    for(int i=0; i<eqn.length(); i++) //implementscja automatu sprawdzajacego poprwawnosc wyrazenie
+    for(int i=0; i<eqn.length(); i++)
     {
         if(state==0){
             if(eqn[i]=='~')
