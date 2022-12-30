@@ -24,4 +24,15 @@ public:
     const char* what () { return (this->message).c_str();}
 };
 
+
+class TreeException : public std::exception {
+private:
+    std::string message = "Tree structure is not correct.";
+public:
+    TreeException(const std::string& msg = ""){
+        this->message += msg;
+    }
+    const char* what () { return (this->message).c_str();}
+};
+
 #endif //ABSTRACTPROGRAMMINGPROJECT_CORECTIONEXCEPTIONS_H

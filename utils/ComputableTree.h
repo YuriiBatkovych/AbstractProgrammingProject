@@ -21,6 +21,11 @@ protected:
         throw VectorsNotAllowedException();
     }
 public:
+
+    ComputableTree(): ExpressionTree<Tensor, NodeCreator>(){}
+    ComputableTree(const ExpressionTree<Tensor, NodeCreator>& expTree):
+                    ExpressionTree<Tensor, NodeCreator>(expTree){};
+
     virtual Tensor compute(){
         if(this->root == nullptr)
             return Tensor();

@@ -3,6 +3,7 @@
 
 #include "TreeNode.h"
 #include "VectorNode.h"
+#include "../exceptions/CorectionExceptions.h"
 
 template<typename Tensor>
 class VectorNode : public TreeNode<Tensor>{
@@ -33,6 +34,7 @@ public:
                 else throw TooFewArgumentsException();
             }
         }
+        throw TreeException();
     }
 
 };

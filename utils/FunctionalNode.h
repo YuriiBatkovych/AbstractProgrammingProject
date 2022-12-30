@@ -2,7 +2,7 @@
 #define ABSTRACTPROGRAMMINGPROJECT_FUNCTIONALNODE_H
 
 #include "TreeNode.h"
-
+#include "../exceptions/CorectionExceptions.h"
 template<typename Tensor>
 class FunctionalNode : public TreeNode<Tensor>{
 private:
@@ -41,6 +41,8 @@ public:
                 else throw TooFewArgumentsException();
             }
         }
+
+        throw TreeException();
     }
 
 };

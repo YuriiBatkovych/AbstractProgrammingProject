@@ -1,9 +1,9 @@
 #include <iostream>
 #include "utils/ExpTree.h"
-#include "utils/Dual.h"
 #include "utils/ExpressionVector.h"
 #include "utils/ExpVectorTree.h"
 #include "utils/FunctionalTree.h"
+#include "utils/ExpressionTreeOperators.h"
 using namespace std;
 
 
@@ -20,11 +20,19 @@ int main() {
     vectorTree.preOrder();
     cout<<vectorTree.compute()<<endl;
 
-    ComputableTree<float> computableTree;
+    ComputableTree<double> computableTree;
     computableTree.constructFromInfix("23+78.9/3-(22+102)");
     computableTree.postOrder();
     cout<<computableTree.compute()<<endl;
 
+    ComputableTree<double> computableTree2;
+    computableTree2.constructFromInfix("100-23+9");
+    computableTree2.postOrder();
+    cout<<computableTree2.compute()<<endl;
+
+    ComputableTree<double> ct = computableTree + computableTree2;
+    ct.inOrder();
+    cout<<ct.compute()<<endl;
 //    ComputableTree<float> computableTree2;
 //    computableTree2.constructFromInfix("23*a-4");
 

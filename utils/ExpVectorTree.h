@@ -23,6 +23,11 @@ protected:
         throw VariablesNotAllowedException();
     }
 public:
+
+    VectorTree(): ExpressionTree<Tensor, VectorNodeCreator>(){}
+    VectorTree(const ExpressionTree<Tensor, VectorNodeCreator>& expTree):
+            ExpressionTree<Tensor, VectorNodeCreator>(expTree){};
+
     ExpressionVector<Tensor> compute(){
         if(this->root == nullptr)
             return ExpressionVector<Tensor>();

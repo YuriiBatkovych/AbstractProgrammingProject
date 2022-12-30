@@ -15,6 +15,10 @@ public:
     static TreeNode<Tensor>* create(Tensor& val){
         return new TreeNode<Tensor>(val);
     }
+
+    static TreeNode<Tensor>* copy(const TreeNode<Tensor>& val){
+        return new TreeNode<Tensor>(val);
+    }
 };
 
 template<typename Tensor>
@@ -25,6 +29,10 @@ public:
     }
 
     static ComputeNode<Tensor>* create(Tensor& val){
+        return new ComputeNode<Tensor>(val);
+    }
+
+    static ComputeNode<Tensor>* copy(const TreeNode<Tensor>& val){
         return new ComputeNode<Tensor>(val);
     }
 };
@@ -40,6 +48,10 @@ public:
     static VectorNode<Tensor>* create(Tensor& val){
         return new VectorNode<Tensor>(val);
     }
+
+    static VectorNode<Tensor>* copy(const VectorNode<Tensor>& val){
+        return new FunctionalNode<Tensor>(val);
+    }
 };
 
 
@@ -51,6 +63,10 @@ public:
     }
 
     static FunctionalNode<Tensor>* create(Tensor& val){
+        return new FunctionalNode<Tensor>(val);
+    }
+
+    static FunctionalNode<Tensor>* copy(const FunctionalNode<Tensor>& val){
         return new FunctionalNode<Tensor>(val);
     }
 };

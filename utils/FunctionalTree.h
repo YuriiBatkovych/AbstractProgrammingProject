@@ -54,6 +54,10 @@ protected:
 
 public:
 
+    FunctionalTree(): ExpressionTree<Tensor, FunctionalNodeCreator>(){}
+    FunctionalTree(const ExpressionTree<Tensor, FunctionalNodeCreator>& expTree):
+            ExpressionTree<Tensor, FunctionalNodeCreator>(expTree){};
+
     Dual<Tensor> compute(string derivative_variable, Tensor arg, ...){
         if(this->root == nullptr)
             return Dual<Tensor>();

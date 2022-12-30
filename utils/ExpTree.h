@@ -204,6 +204,10 @@ public:
         root = nullptr;
     }
 
+    ExpressionTree(const ExpressionTree<Tensor, NodeCreator>& expTree){
+        root = NodeCreator<string>::copy(*expTree.root);
+    }
+
     void constructFromInfix(string eqn){
         string onp_form = constructONP(eqn);
         constructFromONP(onp_form);
@@ -235,7 +239,30 @@ public:
         postOrderShow(root);
         cout<<endl;
     }
-};
 
+    template<typename TensorType,
+             template<typename> class NodeCreatorClass>
+    friend ExpressionTree<TensorType, NodeCreatorClass>
+        operator+(const ExpressionTree<TensorType, NodeCreatorClass>& u,
+                  const ExpressionTree<TensorType, NodeCreatorClass>& v);
+
+    template<typename TensorType,
+            template<typename> class NodeCreatorClass>
+    friend ExpressionTree<TensorType, NodeCreatorClass>
+    operator-(const ExpressionTree<TensorType, NodeCreatorClass>& u,
+              const ExpressionTree<TensorType, NodeCreatorClass>& v);
+
+    template<typename TensorType,
+            template<typename> class NodeCreatorClass>
+    friend ExpressionTree<TensorType, NodeCreatorClass>
+    operator*(const ExpressionTree<TensorType, NodeCreatorClass>& u,
+              const ExpressionTree<TensorType, NodeCreatorClass>& v);
+
+    template<typename TensorType,
+            template<typename> class NodeCreatorClass>
+    friend ExpressionTree<TensorType, NodeCreatorClass>
+    operator/(const ExpressionTree<TensorType, NodeCreatorClass>& u,
+              const ExpressionTree<TensorType, NodeCreatorClass>& v);
+};
 
 #endif //ABSTRACTPROGRAMMINGPROJECT_EXPTREE_H

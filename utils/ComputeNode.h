@@ -4,6 +4,7 @@
 #include "TreeNode.h"
 #include "ComputeNode.h"
 #include "../exceptions/ArgumentsException.h"
+#include "../exceptions/CorectionExceptions.h"
 
 template<typename Tensor>
 class ComputeNode : public TreeNode<Tensor>{
@@ -24,13 +25,14 @@ private:
             }
             else throw TooFewArgumentsException();
         }
+        throw TreeException();
     }
 
 public:
 
     ComputeNode(): TreeNode<Tensor>(){}
-    ComputeNode(Tensor val): TreeNode<Tensor>(val){}
-    ComputeNode(const ComputeNode& other): TreeNode<Tensor>(other){}
+    explicit ComputeNode(Tensor val): TreeNode<Tensor>(val){}
+    explicit ComputeNode(const TreeNode<Tensor>& other): TreeNode<Tensor>(other){}
 
     template<typename ResultType>
     ResultType compute(){
