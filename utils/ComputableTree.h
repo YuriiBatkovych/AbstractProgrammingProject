@@ -6,10 +6,11 @@
 #include "NodeCreators.h"
 #include "ComputeNode.h"
 #include "../exceptions/NotAllowedExceptions.h"
+#include "../concepts/MathConcepts.h"
 
 template<typename Tensor,
          template<typename> class NodeCreator = ComputeNodeCreator
-        >
+        > requires AllOperators<Tensor>
 class ComputableTree : public ExpressionTree<Tensor, NodeCreator>{
 
 protected:

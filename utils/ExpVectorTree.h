@@ -5,7 +5,7 @@
 #include "ComputableTree.h"
 #include "NodeCreators.h"
 
-template<typename Tensor>
+template<typename Tensor> requires AllOperators<Tensor>
 class VectorTree : public ExpressionTree<Tensor, VectorNodeCreator>{
 protected:
     string getNumber(string eqn, int& i) {
@@ -23,7 +23,6 @@ protected:
         throw VariablesNotAllowedException();
     }
 public:
-
     VectorTree(): ExpressionTree<Tensor, VectorNodeCreator>(){}
     [[maybe_unused]] VectorTree(const ExpressionTree<Tensor, VectorNodeCreator>& expTree):
             ExpressionTree<Tensor, VectorNodeCreator>(expTree){};

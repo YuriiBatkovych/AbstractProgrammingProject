@@ -4,8 +4,9 @@
 #include <iostream>
 #include <vector>
 #include <cmath>
+#include "../concepts/MathConcepts.h"
 
-template<typename NumericType>
+template<typename NumericType> requires AllOperators<NumericType>
 class ExpressionVector : public std::vector<NumericType>{
 public:
     template<typename NumericLeft, typename NumericRight>

@@ -15,7 +15,7 @@ int main() {
     functionalTree.inOrder();
     cout<<result.getValue()<<" "<<result.getDerivative()<<endl;
 
-    VectorTree<double> vectorTree;
+    VectorTree<float> vectorTree;
     vectorTree.constructFromInfix("[1,4,6]/[2,2,3]+[0,9,7.8]*([3,4,5]+[1,1,1])");
     vectorTree.preOrder();
     cout<<vectorTree.compute()<<endl;

@@ -13,7 +13,7 @@ NumericType convert(string value){
     if(!value.empty() && isNumber(value[0])) {
         return static_cast<NumericType>(atof(value.c_str()));
     }
-    else throw NumericConvertionException();   ////TO DO
+    else throw NumericConvertionException();
 }
 
 template<typename NumericType>

@@ -9,8 +9,10 @@
 #include <utility>
 #include "Dual.h"
 #include "NodeCreators.h"
+#include "../concepts/MathConcepts.h"
 
 template<typename Tensor, int N_arguments>
+requires AllOperators<Tensor>
 class FunctionalTree : public ExpressionTree<Tensor, FunctionalNodeCreator>{
 private:
     list<string> argument_names;
