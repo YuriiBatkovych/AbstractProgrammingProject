@@ -5,6 +5,7 @@
 #include "Dual.h"
 #include "ExpressionVector.h"
 #include "../exceptions/OperatorException.h"
+#include "OperatorDeductor.h"
 template<typename Tensor>
 class TreeNode
 {
@@ -78,30 +79,12 @@ public:
 
     template<typename ResultType>
     ResultType calculate(ResultType left_arg, ResultType right_arg){
-        switch (val[0]) {
-            case '*':
-                return left_arg*right_arg;
-            case '+':
-                return left_arg+right_arg;
-            case '-':
-                return left_arg-right_arg;
-            case '/':
-                return left_arg/right_arg;
-            case '^':
-                return pow(left_arg, right_arg);
-            default:
-                throw OperatorException();
-        }
+        return OperatorDeductor::calculate(val[0], left_arg, right_arg);
     }
 
     template<typename ArgType>
     ArgType calculate(ArgType arg){
-        switch (val[0]) {
-            case '~':
-                return -arg;
-            default:
-                throw OperatorException();
-        }
+        return OperatorDeductor::calculate(val[0], arg);
     }
 
     void replace(string value, string replace_value){

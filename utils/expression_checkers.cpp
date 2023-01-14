@@ -5,57 +5,9 @@
 #include <stack>
 #include <vector>
 #include <bits/stdc++.h>
+#include "OperatorDeductor.h"
 
 using namespace std;
-
-bool isOperand(char ch){
-    return ch >= '0' && ch <= '9' || ch>='A' && ch<='Z' || ch>='a' && ch<='z';
-}
-
-bool isONPOperand(char ch){
-    return ch == '{' || ch == '[';
-}
-
-bool isLetter(char ch){
-    return ch>='A' && ch<='Z' || ch>='a' && ch<='z';
-}
-
-bool isVariableNameChar(char ch){
-    return ch >= '0' && ch <= '9' || ch>='A' && ch<='Z' || ch>='a' && ch<='z' || ch=='_';
-}
-
-bool  isNumber(char ch){
-    return ch >= '0' && ch <= '9';
-}
-
-bool  isNumberChar(char ch){
-    return ch >= '0' && ch <= '9' || ch == '.';
-}
-
-bool isDoubleNumber(const string& s){
-    return s.find('.') != std::string::npos;
-}
-
-bool isVectorChar(char ch){
-    return isNumberChar(ch) || ch=='[' || ch==']' || ch==',';
-}
-
-bool isOperator(char ch){
-    return ch == '+' || ch == '-' || ch == '*' || ch == '/' || ch == '^'
-           || ch == '%';
-}
-
-bool isMonoOperator(char ch){
-    return ch == '~';
-}
-
-bool isBiOperator(char ch){
-    return isOperator(ch) && !isMonoOperator(ch);
-}
-
-bool isVector(string value){
-    return value[0] == '[' && value[value.length()-1] == ']';
-}
 
 string getVectorWithoutBrackets(string vec){
     return vec.substr(1, vec.length()-2);
@@ -94,16 +46,16 @@ bool ONP_correct(string eqn){
     stack<string> stos;
     for(int i=0; i<eqn.length(); i++)
     {
-        if(isONPOperand(eqn[i])){
+        if(OperatorDeductor::isONPOperand(eqn[i])){
             string operand = getONPOperand(eqn, i);
             stos.push(operand);
         }
-        else if(isBiOperator(eqn[i])) {
+        else if(OperatorDeductor::isBiOperator(eqn[i])) {
             if (stos.empty())
                 return false;
             stos.pop();
         }
-        else if(isMonoOperator(eqn[i])){
+        else if(OperatorDeductor::isMonoOperator(eqn[i])){
             if(stos.empty())
                 return false;
         }
@@ -125,15 +77,16 @@ bool Infix_correct(string eqn){
         if(state==0){
             if(eqn[i]=='~')
                 state = 2;
-            else if(isOperand(eqn[i])) {
+            else if(OperatorDeductor::isOperand(eqn[i])) {
                 state = 1;
-                while(isNumberChar(eqn[i]) || isVariableNameChar(eqn[i]))
+                while(OperatorDeductor::isNumberChar(eqn[i]) ||
+                        OperatorDeductor::isVariableNameChar(eqn[i]))
                     i++;
                 i--;
             }
             else if(eqn[i]=='[') {  //vector
                 state = 1;
-                while(isVectorChar(eqn[i])&&eqn[i]!=']')
+                while(OperatorDeductor::isVectorChar(eqn[i])&&eqn[i]!=']')
                     i++;
             }
             else if(eqn[i]=='(')
@@ -141,7 +94,7 @@ bool Infix_correct(string eqn){
             else break;
         }
         else if(state==1){
-            if(isOperator(eqn[i]))
+            if(OperatorDeductor::isOperator(eqn[i]))
                 state = 0;
             else if(eqn[i]==')'){
                 if(number_open_brackets>0) number_open_brackets--;
@@ -159,9 +112,10 @@ bool Infix_correct(string eqn){
             if (eqn[i] == '(') {
                 state = 0;
                 number_open_brackets++;
-            } else if (isOperand(eqn[i])) {
+            } else if (OperatorDeductor::isOperand(eqn[i])) {
                 state = 1;
-                while(isNumberChar(eqn[i]) || isVariableNameChar(eqn[i]))
+                while(OperatorDeductor::isNumberChar(eqn[i]) ||
+                        OperatorDeductor::isVariableNameChar(eqn[i]))
                     i++;
                 i--;
             }

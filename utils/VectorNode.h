@@ -4,6 +4,7 @@
 #include "TreeNode.h"
 #include "VectorNode.h"
 #include "../exceptions/CorectionExceptions.h"
+#include "OperatorDeductor.h"
 
 template<typename Tensor>
 class VectorNode : public TreeNode<Tensor>{
@@ -19,12 +20,12 @@ public:
             return convertVector<ResultType>(this->val);
         }
         else{
-            if(isBiOperator(this->val[0])){
+            if(OperatorDeductor::isBiOperator(this->val[0])){
                 ExpressionVector<ResultType> left_arg = ((VectorNode<Tensor>*)(this->left))->template computeVector<ResultType>();
                 ExpressionVector<ResultType> right_arg = ((VectorNode<Tensor>*)(this->right))->template computeVector<ResultType>();
                 return calculate<ExpressionVector<ResultType>>(left_arg, right_arg);
             }
-            else if(isMonoOperator(this->val[0])){
+            else if(OperatorDeductor::isMonoOperator(this->val[0])){
                 if(this->left != nullptr){
                     return calculate<ExpressionVector<ResultType>>(((VectorNode<Tensor>*)(this->left))->template computeVector<ResultType>());
                 }

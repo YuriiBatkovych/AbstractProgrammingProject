@@ -26,12 +26,12 @@ public:
             return Dual(convert<ResultType>(this->val));
         }
         else{
-            if(isBiOperator(this->val[0])){
+            if(OperatorDeductor::isBiOperator(this->val[0])){
                 Dual<ResultType> left_arg = ((FunctionalNode<Tensor>*)(this->left))->template computeFunctional<ResultType>();
                 Dual<ResultType> right_arg = ((FunctionalNode<Tensor>*)(this->right))->template computeFunctional<ResultType>();
                 return calculate<Dual<ResultType>>(left_arg, right_arg);
             }
-            else if(isMonoOperator(this->val[0])){
+            else if(OperatorDeductor::isMonoOperator(this->val[0])){
                 if(this->left != nullptr){
                     return calculate<Dual<ResultType>>(((FunctionalNode<Tensor>*)(this->right))->template computeFunctional<ResultType>());
                 }

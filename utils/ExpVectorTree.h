@@ -4,13 +4,14 @@
 #include <iostream>
 #include "ComputableTree.h"
 #include "NodeCreators.h"
+#include "OperatorDeductor.h"
 
 template<typename Tensor> requires AllOperators<Tensor>
 class VectorTree : public ExpressionTree<Tensor, VectorNodeCreator>{
 protected:
     string getNumber(string eqn, int& i) {
         string number;
-        while (isNumberChar(eqn[i])) {
+        while (OperatorDeductor::isNumberChar(eqn[i])) {
             number += eqn[i];
             i++;
         }

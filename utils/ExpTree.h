@@ -54,14 +54,14 @@ protected:
         else if(x=="*"|| x=="/" || x=="%") return 3;
         else if(x=="^") return 4;
         else if(x=="~") return 5;
-        else if(isOperand(x[0])) return 6;
+        else if(OperatorDeductor::isOperand(x[0])) return 6;
         else return -2;
     }
 
     virtual string getVariableName(const string& eqn, int& i){
         string variable;
 
-        while(isVariableNameChar(eqn[i])){
+        while(OperatorDeductor::isVariableNameChar(eqn[i])){
             variable += eqn[i];
             i++;
         }
@@ -73,7 +73,7 @@ protected:
     virtual string getNumber(const string& eqn, int& i){
         string number;
 
-        while (isNumberChar(eqn[i])){
+        while (OperatorDeductor::isNumberChar(eqn[i])){
             number += eqn[i];
             i++;
         }
@@ -85,7 +85,7 @@ protected:
     virtual string getVector(const string& eqn, int i){
         string vector;
 
-        while(isVectorChar(eqn[i]) && eqn[i]!=']'){
+        while(OperatorDeductor::isVectorChar(eqn[i]) && eqn[i]!=']'){
             vector+=eqn[i];
             i++;
         }
@@ -101,8 +101,8 @@ protected:
             stack<string> stos;
             for(int i=0; i<eqn.length(); i++)
             {
-                if(isOperand(eqn[i])) {
-                    if(isLetter(eqn[i])){
+                if(OperatorDeductor::isOperand(eqn[i])) {
+                    if(OperatorDeductor::isLetter(eqn[i])){
                         string var_name = getVariableName(eqn, i);
                         output += var_name;
                     }
@@ -119,7 +119,7 @@ protected:
                 else if(eqn[i]=='(') {
                     stos.push("(");
                 }
-                else if(isOperator(eqn[i]))
+                else if(OperatorDeductor::isOperator(eqn[i]))
                 {
                     string tmp(1, eqn[i]);
                     while(!stos.empty() && priority(stos.top())>=priority(tmp)) {
@@ -162,13 +162,13 @@ protected:
         stack<TreeNode<string>*> tree_stack;
         if(ONP_correct(eqn)){
             for(int i=0; i<eqn.length(); i++){
-                if(isONPOperand(eqn[i])) {
+                if(OperatorDeductor::isONPOperand(eqn[i])) {
                     string operand = getONPOperand(eqn, i);
                     auto* ptr = NodeCreator<string>::create(operand);
                     tree_stack.push(ptr);
                 }
-                else if(isOperator(eqn[i])){
-                    if(isBiOperator(eqn[i])){
+                else if(OperatorDeductor::isOperator(eqn[i])){
+                    if(OperatorDeductor::isBiOperator(eqn[i])){
                         string tmp = string(1, eqn[i]);
                         auto* ptr = NodeCreator<string>::create(tmp);
                         ptr->set_right(tree_stack.top());
@@ -179,7 +179,7 @@ protected:
                         tree_stack.pop();
                         tree_stack.push(ptr);
                     }
-                    else if(isMonoOperator(eqn[i])){
+                    else if(OperatorDeductor::isMonoOperator(eqn[i])){
                         string tmp = string(1, eqn[i]);
                         auto* ptr = NodeCreator<string>::create(tmp);
                         ptr->set_right(tree_stack.top());

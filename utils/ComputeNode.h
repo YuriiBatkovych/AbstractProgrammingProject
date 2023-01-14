@@ -11,12 +11,12 @@ class ComputeNode : public TreeNode<Tensor>{
 private:
     template<typename ResultType>
     ResultType recursiveCompute(){
-        if(isBiOperator(this->val[0])){
+        if(OperatorDeductor::isBiOperator(this->val[0])){
             ResultType left_arg = ((ComputeNode<Tensor>*)(this->left))->template compute<ResultType>();
             ResultType right_arg = ((ComputeNode<Tensor>*)(this->right))->template compute<ResultType>();
             return calculate<ResultType>(left_arg, right_arg);
         }
-        else if(isMonoOperator(this->val[0])){
+        else if(OperatorDeductor::isMonoOperator(this->val[0])){
             if(this->left != nullptr){
                 return calculate<ResultType>(((ComputeNode<Tensor>*)(this->left))->template compute<ResultType>());
             }

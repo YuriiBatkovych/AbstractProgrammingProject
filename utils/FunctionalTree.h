@@ -10,6 +10,7 @@
 #include "Dual.h"
 #include "NodeCreators.h"
 #include "../concepts/MathConcepts.h"
+#include "OperatorDeductor.h"
 
 template<typename Tensor, int N_arguments>
 requires AllOperators<Tensor>
@@ -25,7 +26,7 @@ protected:
     string getVariableName(const string& eqn, int& i){
         string variable;
 
-        while(isVariableNameChar(eqn[i])){
+        while(OperatorDeductor::isVariableNameChar(eqn[i])){
             variable += eqn[i];
             i++;
         }
@@ -45,7 +46,7 @@ protected:
     string getNumber(const string& eqn, int& i){
         string number;
 
-        while (isNumberChar(eqn[i])){
+        while (OperatorDeductor::isNumberChar(eqn[i])){
             number += eqn[i];
             i++;
         }
