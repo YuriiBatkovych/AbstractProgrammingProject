@@ -4,12 +4,12 @@
 #include <stack>
 #include <cstdlib>
 #include <utility>
-#include "expression_checkers.cpp"
 #include "converters.cpp"
 #include "Dual.h"
 #include "TreeNode.h"
 #include "NodeCreators.h"
 #include "../exceptions/CorectionExceptions.h"
+#include "ExpressionChecker.h"
 using namespace std;
 
 template<typename Tensor,
@@ -96,7 +96,7 @@ protected:
     string constructONP(string eqn){
         string output;
 
-        if(Infix_correct(eqn))
+        if(ExpressionChecker::Infix_correct(eqn))
         {
             stack<string> stos;
             for(int i=0; i<eqn.length(); i++)
@@ -160,10 +160,10 @@ protected:
 
     void constructFromONP(string eqn){
         stack<TreeNode<string>*> tree_stack;
-        if(ONP_correct(eqn)){
+        if(ExpressionChecker::ONP_correct(eqn)){
             for(int i=0; i<eqn.length(); i++){
                 if(OperatorDeductor::isONPOperand(eqn[i])) {
-                    string operand = getONPOperand(eqn, i);
+                    string operand = OperatorDeductor::getONPOperand(eqn, i);
                     auto* ptr = NodeCreator<string>::create(operand);
                     tree_stack.push(ptr);
                 }

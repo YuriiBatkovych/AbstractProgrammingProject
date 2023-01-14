@@ -35,6 +35,18 @@ public:
         }
     }
 
+    static string getONPOperand(string eqn, int& i){
+        string operand;
+        i++;
+        while(eqn[i]!='}' && eqn[i]!=']'){
+            operand+=eqn[i];
+            i++;
+        }
+        if(eqn[i]==']')
+            operand = '['+operand+']';
+        return operand;
+    }
+
     static bool isOperand(char ch){ return ch >= '0' && ch <= '9' || ch>='A' && ch<='Z' || ch>='a' && ch<='z';}
 
     static bool isONPOperand(char ch){

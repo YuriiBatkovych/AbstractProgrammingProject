@@ -1,10 +1,10 @@
 #ifndef ABSTRACTPROGRAMMINGPROJECT_CONVERTERS
 #define ABSTRACTPROGRAMMINGPROJECT_CONVERTERS
 
-#include "expression_checkers.cpp"
 #include "ExpressionVector.h"
 #include "../exceptions/NumericConvertionException.h"
 #include "OperatorDeductor.h"
+#include "ExpressionChecker.h"
 
 template<typename InputType, typename OutputType>
 OutputType convert(InputType input){}
@@ -25,7 +25,7 @@ string convert(string value){
 
 template<typename NumericType>
 ExpressionVector<NumericType> convertVector(string value){
-    vector<string> vecOfNums = parseCommaSeparated(getVectorWithoutBrackets(value));
+    vector<string> vecOfNums = ExpressionChecker::parseCommaSeparated(ExpressionChecker::getVectorWithoutBrackets(value));
     ExpressionVector<NumericType> nums;
     nums.reserve(vecOfNums.size());
     for (auto & vecOfNum : vecOfNums)
