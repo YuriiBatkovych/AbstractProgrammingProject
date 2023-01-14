@@ -35,6 +35,17 @@ public:
         }
     }
 
+    static int priority(string x)  //funkcja wyznaczającza priorytet operatora
+    {   if(x=="=") return 0;
+        else if(x==">"|| x=="<") return 1;
+        else if(x=="+"|| x=="-") return 2;
+        else if(x=="*"|| x=="/" || x=="%") return 3;
+        else if(x=="^") return 4;
+        else if(x=="~") return 5;
+        else if(OperatorDeductor::isOperand(x[0])) return 6;
+        else return -2;
+    }
+
     static string getONPOperand(string eqn, int& i){
         string operand;
         i++;

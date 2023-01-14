@@ -20,42 +20,31 @@ class ExpressionTree
 protected:
     TreeNode<string>* root;
 
-    void inOrderShow(TreeNode<string> *ptr){
+    void inOrderShow(ostream& out, TreeNode<string> *ptr){
         if (ptr != nullptr)
         {
-            inOrderShow(ptr->get_left());
-            cout<<ptr->get_value();
-            inOrderShow(ptr->get_right());
+            inOrderShow(out, ptr->get_left());
+            out<<ptr->get_value();
+            inOrderShow(out, ptr->get_right());
         }
     }
 
-    void preOrderShow(TreeNode<string> *ptr){
+    void preOrderShow(ostream& out, TreeNode<string> *ptr){
         if (ptr != nullptr)
         {
-            cout<<ptr->get_value();
-            preOrderShow(ptr->get_left());
-            preOrderShow(ptr->get_right());
+            out<<ptr->get_value();
+            preOrderShow(out, ptr->get_left());
+            preOrderShow(out, ptr->get_right());
         }
     }
 
-    void postOrderShow(TreeNode<string> *ptr){
+    void postOrderShow(ostream& out, TreeNode<string> *ptr){
         if (ptr != nullptr)
         {
-            postOrderShow(ptr->get_left());
-            postOrderShow(ptr->get_right());
-            cout<<ptr->get_value();
+            postOrderShow(out, ptr->get_left());
+            postOrderShow(out, ptr->get_right());
+            out<<ptr->get_value();
         }
-    }
-
-    int priority(string x)  //funkcja wyznaczającza priorytet operatora
-    {   if(x=="=") return 0;
-        else if(x==">"|| x=="<") return 1;
-        else if(x=="+"|| x=="-") return 2;
-        else if(x=="*"|| x=="/" || x=="%") return 3;
-        else if(x=="^") return 4;
-        else if(x=="~") return 5;
-        else if(OperatorDeductor::isOperand(x[0])) return 6;
-        else return -2;
     }
 
     virtual string getVariableName(const string& eqn, int& i){
@@ -122,7 +111,7 @@ protected:
                 else if(OperatorDeductor::isOperator(eqn[i]))
                 {
                     string tmp(1, eqn[i]);
-                    while(!stos.empty() && priority(stos.top())>=priority(tmp)) {
+                    while(!stos.empty() && OperatorDeductor::priority(stos.top())>=OperatorDeductor::priority(tmp)) {
                         output += stos.top();
                         stos.pop();
                     }
@@ -132,7 +121,7 @@ protected:
                 else if(eqn[i]=='~'|| eqn[i]=='^' || eqn[i]=='=')
                 {
                     string tmp(1, eqn[i]);
-                    while(!stos.empty() && priority(stos.top())>priority(tmp)) {
+                    while(!stos.empty() && OperatorDeductor::priority(stos.top())>OperatorDeductor::priority(tmp)) {
                         output += stos.top();
                         stos.pop();
                     }
@@ -213,31 +202,31 @@ public:
         constructFromONP(onp_form);
     }
 
-    void inOrder(){
+    void inOrder(ostream& out){
         if(root== nullptr){
-            cout<<"Tree is empty"<<endl;
+            out<<"Tree is empty"<<endl;
             return;
         }
-        inOrderShow(root);
-        cout<<endl;
+        inOrderShow(out, root);
+        out<<endl;
     }
 
-    void preOrder(){
+    void preOrder(ostream& out){
         if(root== nullptr){
-            cout<<"Tree is empty"<<endl;
+            out<<"Tree is empty"<<endl;
             return;
         }
-        preOrderShow(root);
-        cout<<endl;
+        preOrderShow(out, root);
+        out<<endl;
     }
 
-    void postOrder(){
+    void postOrder(ostream& out){
         if(root== nullptr){
-            cout<<"Tree is empty"<<endl;
+            out<<"Tree is empty"<<endl;
             return;
         }
-        postOrderShow(root);
-        cout<<endl;
+        postOrderShow(out, root);
+        out<<endl;
     }
 
     template<typename TensorType,
