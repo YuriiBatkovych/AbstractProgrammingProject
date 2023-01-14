@@ -3,8 +3,8 @@
 
 #include "TreeNode.h"
 #include "ComputeNode.h"
-#include "../exceptions/ArgumentsException.h"
-#include "../exceptions/CorectionExceptions.h"
+#include "../../exceptions/ArgumentsException.h"
+#include "../../exceptions/CorectionExceptions.h"
 
 template<typename Tensor>
 class ComputeNode : public TreeNode<Tensor>{

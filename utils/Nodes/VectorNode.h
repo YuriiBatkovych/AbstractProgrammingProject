@@ -3,8 +3,8 @@
 
 #include "TreeNode.h"
 #include "VectorNode.h"
-#include "../exceptions/CorectionExceptions.h"
-#include "OperatorDeductor.h"
+#include "../../exceptions/CorectionExceptions.h"
+#include "../OperatorDeductor.h"
 
 template<typename Tensor>
 class VectorNode : public TreeNode<Tensor>{

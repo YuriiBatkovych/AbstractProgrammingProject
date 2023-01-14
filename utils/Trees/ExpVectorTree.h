@@ -3,8 +3,8 @@
 
 #include <iostream>
 #include "ComputableTree.h"
-#include "NodeCreators.h"
-#include "OperatorDeductor.h"
+#include "../Nodes/NodeCreators.h"
+#include "../OperatorDeductor.h"
 
 template<typename Tensor> requires AllOperators<Tensor>
 class VectorTree : public ExpressionTree<Tensor, VectorNodeCreator>{

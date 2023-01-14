@@ -1,9 +1,8 @@
 #include <iostream>
-#include "utils/ExpTree.h"
 #include "utils/ExpressionVector.h"
-#include "utils/ExpVectorTree.h"
-#include "utils/FunctionalTree.h"
-#include "utils/ExpressionTreeOperators.h"
+#include "utils/Trees/ExpVectorTree.h"
+#include "utils/Trees/FunctionalTree.h"
+#include "utils/Trees/ExpressionTreeOperators.h"
 using namespace std;
 
 
@@ -33,9 +32,14 @@ int main() {
     ComputableTree<double> ct = computableTree + computableTree2;
     ct.inOrder();
     cout<<ct.compute()<<endl;
-//    ComputableTree<float> computableTree2;
-//    computableTree2.constructFromInfix("23*a-4");
 
+    ComputableTree<float> computableTree3;
+    try {
+        computableTree3.constructFromInfix("23*a-4");
+    }
+    catch(VariablesNotAllowedException){
+        cout<<"The right exception catched"<<endl;
+    }
 
     return 0;
 }

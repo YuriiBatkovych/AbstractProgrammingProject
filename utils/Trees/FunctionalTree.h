@@ -7,10 +7,10 @@
 #include <algorithm>
 #include <cstdarg>
 #include <utility>
-#include "Dual.h"
-#include "NodeCreators.h"
-#include "../concepts/MathConcepts.h"
-#include "OperatorDeductor.h"
+#include "../Dual.h"
+#include "../Nodes/NodeCreators.h"
+#include "../../concepts/MathConcepts.h"
+#include "../OperatorDeductor.h"
 
 template<typename Tensor, int N_arguments>
 requires AllOperators<Tensor>

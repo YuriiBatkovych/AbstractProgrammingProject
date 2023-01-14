@@ -4,12 +4,12 @@
 #include <stack>
 #include <cstdlib>
 #include <utility>
-#include "converters.cpp"
-#include "Dual.h"
-#include "TreeNode.h"
-#include "NodeCreators.h"
-#include "../exceptions/CorectionExceptions.h"
-#include "ExpressionChecker.h"
+#include "../converters.cpp"
+#include "../Dual.h"
+#include "../Nodes/TreeNode.h"
+#include "../Nodes/NodeCreators.h"
+#include "../../exceptions/CorectionExceptions.h"
+#include "../ExpressionChecker.h"
 using namespace std;
 
 template<typename Tensor,

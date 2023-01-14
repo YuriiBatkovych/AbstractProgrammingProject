@@ -2,10 +2,10 @@
 #define ABSTRACTPROGRAMMINGPROJECT_TREENODE_H
 
 #include <iostream>
-#include "Dual.h"
-#include "ExpressionVector.h"
-#include "../exceptions/OperatorException.h"
-#include "OperatorDeductor.h"
+#include "../Dual.h"
+#include "../ExpressionVector.h"
+#include "../../exceptions/OperatorException.h"
+#include "../OperatorDeductor.h"
 template<typename Tensor>
 class TreeNode
 {

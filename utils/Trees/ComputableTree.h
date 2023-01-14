@@ -3,10 +3,10 @@
 
 #include <iostream>
 #include "ExpTree.h"
-#include "NodeCreators.h"
-#include "ComputeNode.h"
-#include "../exceptions/NotAllowedExceptions.h"
-#include "../concepts/MathConcepts.h"
+#include "../Nodes/NodeCreators.h"
+#include "../Nodes/ComputeNode.h"
+#include "../../exceptions/NotAllowedExceptions.h"
+#include "../../concepts/MathConcepts.h"
 
 template<typename Tensor,
          template<typename> class NodeCreator = ComputeNodeCreator
