@@ -33,6 +33,10 @@ int main() {
     ct.inOrder(cout);
     cout<<ct.compute()<<endl;
 
+    ct = computableTree * computableTree2;
+    ct.inOrder(cout);
+    cout<<ct.compute()<<endl;
+
     ComputableTree<float> computableTree3;
     try {
         computableTree3.constructFromInfix("23*a-4");

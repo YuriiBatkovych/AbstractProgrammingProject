@@ -22,7 +22,7 @@ public:
 };
 
 template<typename Tensor>
-class ComputeNodeCreator{
+class ComputeNodeCreator : public TreeNodeCreator<Tensor>{
 public:
     static ComputeNode<Tensor>* create(){
         return new ComputeNode<Tensor>();
@@ -39,7 +39,7 @@ public:
 
 
 template<typename Tensor>
-class VectorNodeCreator{
+class VectorNodeCreator : public TreeNodeCreator<Tensor>{
 public:
     static VectorNode<Tensor>* create(){
         return new VectorNode<Tensor>();
@@ -49,14 +49,14 @@ public:
         return new VectorNode<Tensor>(val);
     }
 
-    static VectorNode<Tensor>* copy(const VectorNode<Tensor>& val){
-        return new FunctionalNode<Tensor>(val);
+    static VectorNode<Tensor>* copy(const TreeNode<Tensor>& val){
+        return new VectorNode<Tensor>(val);
     }
 };
 
 
 template<typename Tensor>
-class FunctionalNodeCreator{
+class FunctionalNodeCreator : public TreeNodeCreator<Tensor>{
 public:
     static FunctionalNode<Tensor>* create(){
         return new FunctionalNode<Tensor>();
@@ -66,7 +66,7 @@ public:
         return new FunctionalNode<Tensor>(val);
     }
 
-    static FunctionalNode<Tensor>* copy(const FunctionalNode<Tensor>& val){
+    static FunctionalNode<Tensor>* copy(const TreeNode<Tensor>& val){
         return new FunctionalNode<Tensor>(val);
     }
 };

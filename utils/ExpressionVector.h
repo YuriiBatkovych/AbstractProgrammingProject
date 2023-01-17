@@ -25,6 +25,10 @@ public:
     friend ExpressionVector<NumericLeft> operator/(const ExpressionVector<NumericLeft>& u,
                                                    const ExpressionVector<NumericRight>& v);
 
+    template<typename NumericLeft, typename NumericRight>
+    friend bool operator==(const ExpressionVector<NumericLeft>& u,
+                                                   const ExpressionVector<NumericRight>& v);
+
     template<typename NumericRight>
     ExpressionVector<NumericType> operator+=(const ExpressionVector<NumericRight>& u){
         *this = *this+u;
@@ -117,6 +121,22 @@ ExpressionVector<NumericLeft> operator/(const ExpressionVector<NumericLeft>& u,
 
     return result;
 }
+
+template<typename NumericLeft, typename NumericRight>
+bool operator==(const ExpressionVector<NumericLeft>& u,
+                const ExpressionVector<NumericRight>& v){
+
+    if(u.size() == v.size()){
+        for(size_t i=0; i<u.size(); i++)
+            if(u[i]!=v[i]) {
+                return false;
+            }
+    }
+    else return false;
+
+    return true;
+}
+
 
 template<typename Numeric>
 std::ostream& operator<<(std::ostream& os, const ExpressionVector<Numeric>& a){

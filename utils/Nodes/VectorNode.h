@@ -11,8 +11,8 @@ class VectorNode : public TreeNode<Tensor>{
 public:
 
     VectorNode(): TreeNode<Tensor>(){}
-    VectorNode(Tensor val): TreeNode<Tensor>(val){}
-    VectorNode(const VectorNode& other): TreeNode<Tensor>(other){}
+    explicit VectorNode(Tensor val): TreeNode<Tensor>(val){}
+    explicit VectorNode(const TreeNode<Tensor>& other): TreeNode<Tensor>(other){}
 
     template<typename ResultType>
     ExpressionVector<ResultType> computeVector(){

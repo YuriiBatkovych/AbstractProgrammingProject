@@ -92,6 +92,11 @@ public:
         if(left!= nullptr) left->replace(value, replace_value);
         if(right!= nullptr) right->replace(value, replace_value);
     }
+
+    ~TreeNode(){
+        if(left != nullptr) delete left;
+        if(right != nullptr) delete right;
+    }
 };
 
 
